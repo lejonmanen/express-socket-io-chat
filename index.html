@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat!</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	  window.addEventListener('load', () => {
+		  let socket = io();
+		  let sendMessage = e => {
+			  let m = document.getElementById('inputmessage');
+			  let message = m.value;
+			  m.value = '';
+			  socket.emit('chat message', message);
+			  console.log('hello SUBMIT '+message);
+		      return false;
+		  };
+		  document.getElementById('sendbutton').addEventListener('click', sendMessage);
+		  //document.getElementById('inputmessage').addEventListener('click', sendMessage);
+		  socket.on('chat message', msg => {
+			  let li = document.createElement('li');
+			  li.innerText = msg;
+			  document.getElementById('messages').appendChild(li);
+		  })
+	  });
+	</script>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body { font: 13px Helvetica, Arial; }
+		.form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+		.form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+		.form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+		#messages { list-style-type: none; margin: 0; padding: 0; }
+		#messages li { padding: 5px 10px; }
+		#messages li:nth-child(odd) { background: #eee; }
+    </style>
+</head>
+<body>
+	<ul id="messages"></ul>
+	<div class="form">
+      <input id="inputmessage" autocomplete="off" /> <button id="sendbutton">Send</button>
+  </div>
+
+</body>
+</html>
